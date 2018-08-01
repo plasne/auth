@@ -96,11 +96,9 @@ app.get("/login", (_, res) => {
     });
 });
 
-// a sample redirection response instructing a service to go through login
+// a sample 401 that will be handled by the service client
 app.get("/redirect", (_, res) => {
-    res.status(401).send({
-        url: "/login"
-    });
+    res.status(401).end();
 });
 
 // redirect to the main page
