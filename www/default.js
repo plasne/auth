@@ -14,5 +14,16 @@ function getQuerystring(key, default_) {
 
 $(document).ready(function () {
 
+    $("#service-login").click(function() {
+        $.ajax({
+            url: "/login",
+            success: function() {
+                alert("success!");
+            },
+            error: function(err) {
+                alert("failure!");
+            }
+        });
+    });
     
 });
