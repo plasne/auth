@@ -65,7 +65,7 @@ function getAccessTokenFromCode(code) {
     });
 }
 
-// get an authorization token
+// get an authorization token from an authentication code
 app.get("/token", async (req, res) => {
 
     // get the access token
@@ -82,7 +82,7 @@ app.get("/token", async (req, res) => {
 
 });
 
-// a login with user consent (if the admin has already consented there is no additional consent required)
+// starts are redirection process to authentiate
 app.get("/login", (_, res) => {
     crypto.randomBytes(48, (err, buf) => {
         if (!err) {
@@ -93,6 +93,13 @@ app.get("/login", (_, res) => {
         } else {
             res.status(500).send("Server Error: a crypto token couldn't be created to secure the session.");
         }
+    });
+});
+
+// a sample redirection response instructing a service to go through login
+app.get("/redirect", (_, res) => {
+    res.status(401).send({
+        url: "/login"
     });
 });
 

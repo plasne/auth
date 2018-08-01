@@ -6,9 +6,15 @@
     <body>
         <div style="margin : 16px"</div>
             <a href="/login">login via redirect of full page</a>
+            <div>The full page does an authentication. This should succeed.</div>
         </div>
         <div style="margin : 16px"</div>
-            <a href="#" id="service-login">login via service</a>
+            <a href="#" id="service-302">login via service returning 302</a>
+            <div>A service call returns a 302; this will fail because the endpoint is trying a redirect and it will get blocked by CORS.</div>
+        </div>
+        <div style="margin : 16px"</div>
+            <a href="#" id="service-401">login via service returning 401</a>
+            <div>A service call returns a 401; then the error triggers a full page authenication.</div>
         </div>
         <div id="status"></div>
     </body>

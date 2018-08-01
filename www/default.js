@@ -1,20 +1,8 @@
 
-/*
-function getQuerystring(key, default_) {
-    if (default_ == null) default_ = "";
-    key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-    var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
-    var qs = regex.exec(window.location.href);
-    if (qs == null)
-        return default_;
-    else
-        return qs[1];
-}
-*/
-
 $(document).ready(function () {
 
-    $("#service-login").click(function() {
+    // 302; bad example
+    $("#service-302").click(function() {
         $.ajax({
             url: "/login",
             success: function() {
@@ -26,4 +14,21 @@ $(document).ready(function () {
         });
     });
     
+    // 401; good example
+    $("#service-401").click(function() {
+        $.ajax({
+            url: "/redirect",
+            success: function() {
+                $("#status").text("success!");
+            },
+            error: function(err) {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                } else {
+                    $("#status").text(JSON.stringify(err));
+                }
+            }
+        });
+    });
+
 });
