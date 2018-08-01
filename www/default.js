@@ -18,10 +18,10 @@ $(document).ready(function () {
         $.ajax({
             url: "/login",
             success: function() {
-                alert("success!");
+                $("#status").text("success!");
             },
             error: function(err) {
-                alert("failure!");
+                $("#status").text(err);
             }
         });
     });
