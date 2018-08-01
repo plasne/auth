@@ -21,7 +21,7 @@ $(document).ready(function () {
                 $("#status").text("success!");
             },
             error: function(err) {
-                $("#status").text(err);
+                $("#status").text(JSON.stringify(err));
             }
         });
     });
