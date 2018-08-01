@@ -15,7 +15,8 @@ cmd
     .option("-d, --directory <string>", `DIRECTORY. The name or GUID of the Azure AD containing the APP_ID.`)
     .option("-i, --app-id <string>", `APP_ID. The ID (GUID) for the Application that was created in Azure AD.`)
     .option("-k, --app-key <string>", `APP_KEY. The key from the Application that was created in Azure AD.`)
-    .option("-r, --redirect-uri <string>", `REDIRECT_URI. The exact hostname that will be redirected to after the authentication.`)
+    .option("-h, --redirect-uri <string>", `REDIRECT_URI. The exact hostname that will be redirected to after the authentication.`)
+    .option("-r, --resource <string>", `RESOURCE. The resource that you want to authenticate to.`)
     .parse(process.argv);
 
 // variables
@@ -24,8 +25,8 @@ const DIRECTORY    = cmd.directory   || process.env.DIRECTORY;
 const APP_ID       = cmd.appId       || process.env.APP_ID;
 const APP_KEY      = cmd.appKey      || process.env.APP_KEY;
 const REDIRECT_URI = cmd.redirectUri || process.env.REDIRECT_URI;
+const RESOURCE     = cmd.resource    || process.env.RESOURCE     || "https://management.azure.com/";
 const authority    = "https://login.microsoftonline.com/";
-const resource     = "https://management.azure.com/";
 
 // log
 console.log(`PORT         = "${PORT}"`);
@@ -49,7 +50,7 @@ function getAccessTokenFromCode(code) {
         authenticationContext.acquireTokenWithAuthorizationCode(
             code,
             REDIRECT_URI,
-            resource,
+            RESOURCE,
             APP_ID,
             APP_KEY,
             (err, response) => {
@@ -86,7 +87,7 @@ app.get("/login", (_, res) => {
         if (!err) {
             const token = buf.toString("base64").replace(/\//g, "_").replace(/\+/g, "-");
             const base = urljoin(authority, DIRECTORY, "/oauth2/authorize");
-            const url = `${base}?response_type=code&client_id=${qs.escape(APP_ID)}&redirect_uri=${qs.escape(REDIRECT_URI)}&state=${qs.escape(token)}&resource=${qs.escape(resource)}`;
+            const url = `${base}?response_type=code&client_id=${qs.escape(APP_ID)}&redirect_uri=${qs.escape(REDIRECT_URI)}&state=${qs.escape(token)}&resource=${qs.escape(RESOURCE)}`;
             res.redirect(url);
         } else {
             res.status(500).send("Server Error: a crypto token couldn't be created to secure the session.");
