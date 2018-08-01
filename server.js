@@ -46,7 +46,8 @@ app.use(express.static("www"));
 // Azure AD will first return a code that can then be converted into an access token with rights as defined for the app
 function getAccessTokenFromCode(code) {
     return new Promise((resolve, reject) => {
-        const authenticationContext = new AuthenticationContext(authority);
+        const base = urljoin(authority, DIRECTORY);
+        const authenticationContext = new AuthenticationContext(base);
         authenticationContext.acquireTokenWithAuthorizationCode(
             code,
             REDIRECT_URI,
