@@ -24,6 +24,7 @@ const DIRECTORY    = cmd.directory   || process.env.DIRECTORY;
 const APP_ID       = cmd.appId       || process.env.APP_ID;
 const APP_KEY      = cmd.appKey      || process.env.APP_KEY;
 const REDIRECT_URI = cmd.redirectUri || process.env.REDIRECT_URI;
+const authority    = "https://login.microsoftonline.com/";
 const resource     = "https://management.azure.com/";
 
 // log
@@ -84,7 +85,7 @@ app.get("/login", (_, res) => {
     crypto.randomBytes(48, (err, buf) => {
         if (!err) {
             const token = buf.toString("base64").replace(/\//g, "_").replace(/\+/g, "-");
-            const base = urljoin("https://login.microsoftonline.com/", DIRECTORY, "/oauth2/authorize");
+            const base = urljoin(authority, DIRECTORY, "/oauth2/authorize");
             const url = `${base}?response_type=code&client_id=${qs.escape(APP_ID)}&redirect_uri=${qs.escape(REDIRECT_URI)}&state=${qs.escape(token)}&resource=${qs.escape(resource)}`;
             res.redirect(url);
         } else {
